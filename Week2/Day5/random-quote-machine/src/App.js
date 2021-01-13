@@ -7,9 +7,9 @@ import QuotesMachine from "./components/QuoteMachine";
 
 const styles = {
   container: {
+    height: "100vh",
     alignItems: "center",
     display: "flex",
-    height: "100vh",
   },
 };
 
