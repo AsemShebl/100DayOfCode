@@ -1,10 +1,11 @@
 import "./App.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Break from "./components/Break";
 import Session from "./components/Session";
 import TimeLeft from "./components/TimeLeft";
 
 function App() {
+  const audioElement = useRef(null);
   const [currentSessionType, setCurrentSessionType] = useState("Session"); //'Session' or 'Break'
   const [intervalId, setIntervalId] = useState(null);
   const [sessionLength, setSessionLength] = useState(60 * 25);
@@ -60,7 +61,8 @@ function App() {
           if (newTimeLeft >= 0) {
             return prevTimeLeft - 1;
           }
-
+          // time left is less than zero
+          audioElement.current.play();
           // if session:
           if (currentSessionType === "Session") {
             //switch to break
@@ -70,19 +72,21 @@ function App() {
           }
 
           // if break:
-          else if (currentSessionType === "Break") {
+          if (currentSessionType === "Break") {
             //switch to Session
             setCurrentSessionType("Session");
             //setTimeLeft to SessionBreak
             setTimeLeft(sessionLength);
           }
         });
-      }, 1000);
+      }, 100);
       setIntervalId(newIntervalId);
     }
   };
 
   const handleResetButtonClick = () => {
+    // reset audio
+    audioElement.current.load();
     // clear the timeout interval
     clearInterval(intervalId);
     // set the intervalId null
@@ -117,9 +121,13 @@ function App() {
         incrementSessionLengthByOneMinutes={incrementSessionLengthByOneMinutes}
         decrementSessionLengthByOneMinutes={decrementSessionLengthByOneMinutes}
       />
-      <button id="reset" onClick={handleResetButtonClick}>
-        Reset
-      </button>
+      <button onClick={handleResetButtonClick}>Reset</button>
+      <audio ref={audioElement}>
+        <source
+          src="https://orangefreesounds.com/wp-content/uploads/2019/03/Twin-bell-alarm-clock-sound.mp3"
+          type="audio/mpeg"
+        />
+      </audio>
     </div>
   );
 }
