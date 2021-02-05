@@ -1,3 +1,10 @@
+/**
+ * Input : Linked List
+ * Output: true/false
+ * Constraints: -
+ * Edge Cases :-
+ **/
+
 const hasCycle = (head) => {
   // track 2 pointers to be references to the head
   let slow = head;
